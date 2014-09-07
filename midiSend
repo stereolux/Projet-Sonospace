@@ -1,0 +1,27 @@
+#!/usr/bin/env node
+var program = require('commander'),
+	midi = require('midi');
+
+// Set up a new output.
+var output = new midi.output();
+
+program
+	.version('0.0.1')
+	.option('-p, --port <n>', 'Index of the MIDI port', parseInt)
+	.option('-m, --message <items>', 'MIDI message, 3 bytes, comma separated', list)
+	.parse(process.argv);
+
+function list(message) {
+	var items = message.split(',');
+	if (items.length !== 3) throw new Error('Must be 3 bytes, comma separated');
+	var result = [];
+	for (var i = 0; i < items.length; i++) {
+		result[i] = parseInt(items[i]);
+	};
+	return result;
+}
+
+console.log('Sending to ' + output.getPortName(program.port) + ' ...');
+output.openPort(program.port);
+output.sendMessage(program.message);
+output.closePort();

@@ -1,0 +1,19 @@
+#!/usr/bin/env node
+var program = require('commander'),
+	midi = require('midi');
+
+var input = new midi.input();
+
+program
+	.version('0.0.1')
+	.option('-p, --port <n>', 'Index of the MIDI port', parseInt)
+	.parse(process.argv);
+
+console.log('Listening to ' + input.getPortName(program.port) + ' ...');
+
+// configure a callback for incoming messages
+input.on('message', function(deltaTime, message) {
+	console.log('[Message] ' + message);
+});
+// open the port
+input.openPort(program.port);
