@@ -13,7 +13,7 @@ console.log('Listening to ' + input.getPortName(program.port) + ' ...');
 
 // configure a callback for incoming messages
 input.on('message', function(deltaTime, message) {
-	console.log('[Message] ' + message);
+	console.log('[Message] ' + message +' [DeltaTime] ' + deltaTime);
 });
 // open the port
 input.openPort(program.port);

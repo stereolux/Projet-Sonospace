@@ -4,8 +4,6 @@
 #include "midi_Settings.h"
 #include "Planet.h"
 
-#define DEBUG false
-
 Planet planet1(A0, 10, 0);
 Planet planet2(A1, 9, 1);
 Planet planet3(A2, 7, 2);
@@ -15,26 +13,30 @@ Planet planet6(A5, 4, 5);
 Planet planet7(A6, 3, 6);
 Planet planet8(A7, 2, 7);
 
-const int NUMBER_OF_PLANETS = 1;
+//const int NUMBER_OF_PLANETS = 1;
 //const int NUMBER_OF_PLANETS = 5;
-//const int NUMBER_OF_PLANETS = 8;
+const int NUMBER_OF_PLANETS = 8;
 
-Planet planets[NUMBER_OF_PLANETS] = {planet1};
+//Planet planets[NUMBER_OF_PLANETS] = {planet1};
 //Planet planets[NUMBER_OF_PLANETS] = {planet1, planet2, planet3, planet4, planet5};
-//Planet planets[NUMBER_OF_PLANETS] = {planet1, planet2, planet3, planet4, planet5, planet6, planet7, planet8};
+Planet planets[NUMBER_OF_PLANETS] = {planet1, planet2, planet3, planet4, planet5, planet6, planet7, planet8};
 
 // status led
-int statusLed = 13;
-// play button
-int playButton = 11;
-// reset button
-int resetButton = 12;
+int statusLed = 51;
+// play button (53  -----/ ----- GND)
+int playButton = 53;
+// reset button (49  -----/ ----- GND)
+int resetButton = 49;
 
 // states of buttons
 int playCurrent = 0;
 int playOld = 0;
 int resetCurrent = 0;
 int resetOld = 0;
+
+// timer
+const int INTERVAL = 100;
+long previousMillis = 0;
 
 void setup() {
 	// define status led
@@ -47,46 +49,46 @@ void setup() {
 	// activate internal pull up resistor
 	pinMode(resetButton, INPUT);
 	digitalWrite(resetButton,HIGH);
-	// 2 modes on through serial for debbugging
-	// another through midi + HIDUINO
-	if (DEBUG) {
-		Serial.begin(9600);
-	}
-	else {
-		MIDI.begin(MIDI_CHANNEL_OMNI);
-		MIDI.setHandleControlChange(HandleControlChange);
-	}
+	// activate through midi + HIDUINO
+	MIDI.begin(MIDI_CHANNEL_OMNI);
+	MIDI.setHandleControlChange(HandleControlChange);
 }
 
 void loop() {
-	if (!DEBUG) MIDI.read();
-
+	MIDI.read();
 	checkButtons();
-
-	for(int i=0; i < NUMBER_OF_PLANETS; i++){
-		if (DEBUG) {
-			planets[i].logValue();
-		}
-		else {
+	// get ir sensor values
+	for(int j=0; j < NUMBER_OF_PLANETS; j++){
+		planets[j].addValue();
+		delay(1);
+	}
+	// send MIDI messages only every INTERVAL ms
+	unsigned long currentMillis = millis();
+	if(currentMillis - previousMillis > INTERVAL) {
+		previousMillis = currentMillis;
+		for(int i=0; i < NUMBER_OF_PLANETS; i++){
 			planets[i].sendControlChange();
 		}
 	}
-	if (DEBUG) delay(1000);
 }
 
 void HandleControlChange (byte channel, byte controller, byte value) {
 	// controller 18 is for the status led, all others are for leds on the planets
-	if (controller == 18) {
-		if (value == 1) {
-			digitalWrite(statusLed, HIGH);
-		}
-		else if (value == 0) {
-			digitalWrite(statusLed, LOW);
+	if (channel == 12) {
+		int planetIndex = int(controller - 8);
+		if (planetIndex >= 0 && planetIndex <= 7) {
+			planets[planetIndex].setBrightness(value);
 		}
 	}
-	else {
-		int planetIndex = controller - 8;
-		planets[planetIndex].setBrightness(value);
+	else if (channel == 13) {
+		if (controller == 18) {
+			if (value == 1) {
+				digitalWrite(statusLed, HIGH);
+			}
+			else if (value == 0) {
+				digitalWrite(statusLed, LOW);
+			}
+		}
 	}
 }
 
