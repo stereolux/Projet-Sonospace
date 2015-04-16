@@ -3,15 +3,21 @@
 Installer node.js puis:
 
 ```
-sudo apt-get install libasound2-dev
+sudo apt-get install libasound2-dev dfu-programmer
 npm i
 ```
-
 
 # Débugger
 
 Utiliser les utilitaires `midiSend` et `midiSniffer` pour envoyer et recevoir des messages MIDI.
 
+# Passer de mode Arduino à mode MIDI natif sur usb
+
+Mettre en contact pendant 2 secondes les pins répérées en rouge ci-dessous:
+
+![dfuMode](doc/Uno-front-DFU-reset.png)
+
+Puis executer soit un `make mega` pour passer en mode arduino, ou un `make midi` pour passer en mode MIDI natif.
 
 # Répartition des adresses MIDI
 
@@ -48,7 +54,7 @@ Exemple: Allumer puis éteindre la led de status
 
 ## Planètes
 
-Toutes les 100ms, des Control Change sont envoyés des valeurs sur le channel 11. La valeur varie de 0 (planète sur son socle) à 127 (planète au max de la hauteur de captation du capteur). Un Control Change n'est envoyé que si la hauteur de la planète a changée.
+Toutes les 100ms, des Control Change sont envoyés sur le channel 11. La valeur varie de 0 (planète sur son socle) à 127 (planète au max de la hauteur de captation du capteur). Un Control Change n'est envoyé que si la hauteur de la planète a changée.
 
 Chaque planète dispose d'un numéro de controller sur ce channel 11. Voici comment ils sont attribués:
 
