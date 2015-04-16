@@ -73,13 +73,14 @@ void loop() {
 }
 
 void HandleControlChange (byte channel, byte controller, byte value) {
-	// controller 18 is for the status led, all others are for leds on the planets
+	// channel 12 is for the leds on the planets
 	if (channel == 12) {
 		int planetIndex = int(controller - 8);
 		if (planetIndex >= 0 && planetIndex <= 7) {
 			planets[planetIndex].setBrightness(value);
 		}
 	}
+	// channel 13, controller 18 is the status led
 	else if (channel == 13) {
 		if (controller == 18) {
 			if (value == 1) {
