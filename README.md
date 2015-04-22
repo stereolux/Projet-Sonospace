@@ -39,13 +39,13 @@ Voir la spec MIDI: [http://www.midi.org/techspecs/midimessages.php#2](http://www
 
 Envoyer un Control Change sur le channel 12. Utiliser le bit de controle afin d'identifier la planète et le bit de value pour controler la luminosité.
 
-Exemple: Mettre la luminosité de la planète 7 à fond.
+Exemple: Mettre la luminosité de la planète 1 à fond.
 
 ```
-./midiSend -p 1 -m 187,15,127
+./midiSend -p 1 -m 187,9,127
 ```
 - Selon la spec le control change du channel 12 est repéré par le nombre 187.
-- Les leds de la planète n°X sont gérées par le controller X-8 (ici 15 est donc le controller des leds de la planète 7).
+- Les leds de la planète n°X sont gérées par le controller X-8 (ici 9 est donc le controller des leds de la planète 1).
 - La valeur de luminosité va de 0 (éteinte) à 127 (allumée à fond).
 
 ## Led de status de l'install

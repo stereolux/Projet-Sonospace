@@ -12,7 +12,7 @@ var xbeeAPI = new xbee_api.XBeeAPI({
 	api_mode: 2
 });
 
-var serialPort = new SerialPort('/dev/ttyUSB0', {
+var serialPort = new SerialPort('/dev/tty.usbserial-A401056Q', {
 	parser: xbeeAPI.rawParser()
 });
 
@@ -27,7 +27,6 @@ var frame = {
 
 // midi input
 var input = new midi.input();
-console.log('Listening to ' + input.getPortName(0) + ' ...');
 
 // configure a callback for incoming midi messages
 input.on('message', function(deltaTime, message) {
@@ -35,11 +34,10 @@ input.on('message', function(deltaTime, message) {
 		return parseInt(item, 10);
 	});
 	// message for leds
-	if (midiMessage[0] === 187 && 7 < midiMessage[1] && midiMessage[1] < 16) {
+	if (midiMessage[0] === 187 && 8 < midiMessage[1] && midiMessage[1] < 17) {
 		var planet = midiMessage[1] - 8;
 		frame.destination16 = '000' + planet.toString(10);
 		frame.data = midiMessage[2].toString();
-		console.log(frame);
 		serialPort.write(xbeeAPI.buildFrame(frame));
 	}
 	//message for status led
@@ -53,12 +51,12 @@ input.on('message', function(deltaTime, message) {
 	}
 });
 // open the port
-input.openPort(0);
+input.openVirtualPort('Leds');
 
 
 // midi output
 var output = new midi.output();
-output.openVirtualPort('Steles');
+output.openVirtualPort('Capteurs');
 // intercept xbee msg and route them to midi
 xbeeAPI.on('frame_object', function(frame) {
 	if (frame.type === C.FRAME_TYPE.RX_PACKET_16) {
