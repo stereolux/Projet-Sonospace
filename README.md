@@ -7,6 +7,18 @@ sudo apt-get install libasound2-dev dfu-programmer
 npm i
 ```
 
+# Conf Xbee
+
+```
++++
+ATRE
+ATID1
+ATMY<1-9>
+ATAP2
+ATWR
+ATCN
+```
+
 # Débugger
 
 Utiliser les utilitaires `midiSend` et `midiSniffer` pour envoyer et recevoir des messages MIDI.
@@ -60,11 +72,11 @@ Chaque planète dispose d'un numéro de controller sur ce channel 11. Voici comm
 
 |Planète|Controller|
 |---|---|
-|1|0|
-|2|1|
-|3|2|
-|4|3|
-|5|4|
-|6|5|
-|7|6|
-|8|7|
+|1|1|
+|2|2|
+|3|3|
+|4|4|
+|5|5|
+|6|6|
+|7|7|
+|8|8|

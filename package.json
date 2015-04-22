@@ -4,7 +4,9 @@
   "description": "Sonospace arduino code and node.js tools",
   "dependencies": {
     "commander": "^2.3.0",
-    "midi": "^0.9.0"
+    "midi": "^0.9.0",
+    "serialport": "^1.6.3",
+    "xbee-api": "^0.3.10"
   },
   "devDependencies": {},
   "repository": {

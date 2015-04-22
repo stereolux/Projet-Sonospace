@@ -13,13 +13,13 @@ Planet planet6(A5, 4, 5);
 Planet planet7(A6, 3, 6);
 Planet planet8(A7, 2, 7);
 
-//const int NUMBER_OF_PLANETS = 1;
+const int NUMBER_OF_PLANETS = 1;
 //const int NUMBER_OF_PLANETS = 5;
-const int NUMBER_OF_PLANETS = 8;
+//const int NUMBER_OF_PLANETS = 8;
 
-//Planet planets[NUMBER_OF_PLANETS] = {planet1};
+Planet planets[NUMBER_OF_PLANETS] = {planet1};
 //Planet planets[NUMBER_OF_PLANETS] = {planet1, planet2, planet3, planet4, planet5};
-Planet planets[NUMBER_OF_PLANETS] = {planet1, planet2, planet3, planet4, planet5, planet6, planet7, planet8};
+//Planet planets[NUMBER_OF_PLANETS] = {planet1, planet2, planet3, planet4, planet5, planet6, planet7, planet8};
 
 // status led
 int statusLed = 51;
